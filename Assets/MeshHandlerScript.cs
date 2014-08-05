@@ -26,12 +26,12 @@ public class MeshHandlerScript : MonoBehaviour
             Vector3 tmpPos = pos;
             if (pos.z > originalPos.z)
             {
-                pos.z -= 1 * Time.deltaTime;
+                //pos.z -= 1 * Time.deltaTime;
             }
             else if (tmpPos.z != originalPos.z)
             {
-                pos.z = originalPos.z;
-                reconnectPiece(go);
+                //pos.z = originalPos.z;
+                //reconnectPiece(go);
             }
             go.transform.position = pos;
         }
