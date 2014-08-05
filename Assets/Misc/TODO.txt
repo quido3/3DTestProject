@@ -1,0 +1,18 @@
+For the cutting
+
+Slicing needs a effect. Sound and some part flying
+
+Slicing needs collider for the enemies
+
+Slicing needs to work without looking at parts
+
+First and last vector calculating for the trail
+
+Sliced part to disappear
+
+Sliced part to join the mass
+
+DONE - Slicing generates the new piece like shit. Center points is the original center
+
+PROBLEM - The second vertice of the last triangle is wrong for some reason. Only when slicing "backwards". Last vertice is at the opposite side because of the trail added there
+				Happen on both sides. Need to set it to some of the closest closest3 or something
