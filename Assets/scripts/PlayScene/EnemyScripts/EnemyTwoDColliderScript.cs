@@ -21,7 +21,10 @@ public class EnemyTwoDColliderScript : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collider)
     {
         //print("trigger enter");
-        parent.hitted();
+        if (parent != null)
+        {
+            parent.hitted();
+        }
     }
 
     void OnTriggerStay2D(Collider2D other)

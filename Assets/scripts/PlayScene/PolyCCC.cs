@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Poly : MonoBehaviour
+public class PolyCCC : MonoBehaviour
 {
 
     // Use this for initialization
@@ -18,7 +18,6 @@ public class Poly : MonoBehaviour
 
     public static bool ContainsPoint(Vector3[] polyPoints, Vector3[] ps)
     {
-
         foreach (Vector3 p in ps)
         {
             int j = polyPoints.Length - 1;

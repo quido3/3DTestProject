@@ -21,6 +21,8 @@ public class mouseSlicer : MonoBehaviour
     private Vector3 secondIN;
     private Vector3 secondOUT;
 
+    public GameObject enemyParent;
+
     private Vector3 impactPointIN = Vector3.zero, impactPointOUT = Vector3.zero;
 
     private int inIndex = 0, outIndex = 0;
@@ -46,8 +48,6 @@ public class mouseSlicer : MonoBehaviour
             centerPoints.Add(cutArea.GetComponent<MeshFilter>().sharedMesh.vertices[0]);
         }
         handleMouse();
-        drawLine();
-
         Debug.DrawLine(Vector3.zero, firstOUT, Color.red);
         Debug.DrawLine(Vector3.zero, firstIN, Color.green);
     }
@@ -68,20 +68,53 @@ public class mouseSlicer : MonoBehaviour
         }
     }
 
+    private bool checkEnemyCollision(List<Vector3> pointsList)
+    {
+        int i = 0;
+        foreach (Vector3 v in pointsList)
+        {
+            i++;
+            if (pointsList.Count > i)
+            {
+                Vector3 v2 = pointsList[i];
+                RaycastHit2D hit = Physics2D.Raycast(v, v2, Vector3.Distance(v, v2));
+                Debug.DrawLine(v, v2, Color.green);
+                if (hit.transform != null)
+                {
+                    if (hit.transform.gameObject.tag != "OuterRing")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     private void handleMouse()
     {
         if (Input.GetMouseButtonDown(0))
         {
             trailer.startTrail(Input.mousePosition);
         }
-
         if (Input.GetMouseButton(0))
         {
-            trailer.Add(Input.mousePosition);
+            if (checkEnemyCollision(trailer.getList()))
+            {
+                trailer.endTrail(Input.mousePosition);
+                liner.SetVertexCount(0);
+                trailer.startTrail(Input.mousePosition);
+            }
+            else
+            {
+                trailer.Add(Input.mousePosition);
+                drawLine();
+            }
         }
 
         if (Input.GetMouseButtonUp(0))
         {
+            liner.SetVertexCount(0);
             trailer.endTrail(Input.mousePosition);
             List<GameObject> hittedmeshes = getHittedMeshes(trailer.getList());
             if (hittedmeshes != null && hittedmeshes.Count > 0)
@@ -428,6 +461,9 @@ public class mouseSlicer : MonoBehaviour
             newPos = newMesh.transform.position;
             newPos.z = 4;
             newMesh.transform.position = newPos;
+
+            killEnemiesInside(plane);
+
         }
         else
         {
@@ -437,6 +473,25 @@ public class mouseSlicer : MonoBehaviour
         }
     }
 
+    private void killEnemiesInside(Mesh m)
+    {
+        foreach (Transform e in enemyParent.transform)
+        {
+            Vector3 spot = e.collider.bounds.center;
+            Vector3 size = e.collider.bounds.size;
+
+            Vector3[] enemyPoints = new Vector3[4] {
+                new Vector3(spot.x - (size.x/2),spot.y,spot.z),
+                new Vector3(spot.x + (size.x/2),spot.y,spot.z),
+                new Vector3(spot.x,spot.y - (size.y/2),spot.z),
+                new Vector3(spot.x,spot.y + (size.y/2),spot.z)
+        };
+            if (PolyC.ContainsPoint(m.vertices, e.position))
+            {
+                Destroy(e.gameObject);
+            }
+        }
+    }
 
 
 
@@ -452,7 +507,6 @@ public class mouseSlicer : MonoBehaviour
             {
                 return true;
             }
-
         }
         return false;
     }
