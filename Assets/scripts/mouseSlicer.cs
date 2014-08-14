@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 public class mouseSlicer : MonoBehaviour
 {
+
+    private LayerMask lMask = 1 << 0;
+
     public GameObject cutArea;
     public SliceTrailer trailer;
     public LineRenderer liner;
@@ -443,7 +446,7 @@ public class mouseSlicer : MonoBehaviour
         Vector3 direction = v;
         direction.z = 1;
         RaycastHit hit = new RaycastHit();
-        if (Physics.Raycast(transform.position, direction, out hit))
+        if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity, lMask))
         {
             if (hit.transform.gameObject.GetInstanceID() == g.GetInstanceID())
             {
@@ -460,7 +463,7 @@ public class mouseSlicer : MonoBehaviour
         Vector3 direction = v;
         direction.z = 1;
         RaycastHit hit = new RaycastHit();
-        if (Physics.Raycast(transform.position, direction, out hit))
+        if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity, lMask))
         {
             return hit.transform.gameObject;
         }
