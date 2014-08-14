@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: f63a8373681aafb448c03bd2d3e50a69
+guid: 3813542001b64a94db889c4a16141751
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Vial
+    21300000: Koeputki ja hana
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -35,7 +35,7 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 6
+  alignment: 0
   spritePivot: {x: .5, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 64
