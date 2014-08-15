@@ -418,6 +418,7 @@ public class mouseSlicer : MonoBehaviour
         area2 = calculaterMeshArea(plane);
 
         GameObject newMesh = (GameObject)Instantiate(meshPref, new Vector3(0, 0, 0), Quaternion.identity);
+        newMesh.transform.localPosition = new Vector3(0, 0, 0);
         newMesh.GetComponent<MeshFilter>().sharedMesh = plane;
         newMesh.AddComponent<MeshCollider>();
         meshHandler.addMesh(newMesh);

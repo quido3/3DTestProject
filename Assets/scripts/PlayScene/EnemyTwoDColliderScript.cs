@@ -6,10 +6,15 @@ public class EnemyTwoDColliderScript : MonoBehaviour
 
     EnemyScript parent;
 
+    void Awake()
+    {
+        parent = this.transform.parent.GetComponent<EnemyScript>();
+    }
+
     // Use this for initialization
     void Start()
     {
-        parent = this.transform.parent.GetComponent<EnemyScript>();
+
     }
 
     // Update is called once per frame
@@ -20,16 +25,13 @@ public class EnemyTwoDColliderScript : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        //print("trigger enter");
         parent.hitted();
     }
 
     void OnTriggerStay2D(Collider2D other)
     {
-        //print("trigger stay");
     }
     void OnTriggerExit2D(Collider2D other)
     {
-        //print("trigger exit");
     }
 }
