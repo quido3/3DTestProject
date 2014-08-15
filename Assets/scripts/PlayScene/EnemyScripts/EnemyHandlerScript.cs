@@ -15,8 +15,7 @@ public class EnemyHandlerScript : MonoBehaviour
     {
         for (int i = 0; i < enemyCount; i++)
         {
-            GameObject enemy = (GameObject)Instantiate(enemyPref, new Vector3(0, 0, 0), Quaternion.identity);
-            enemy.transform.parent = enemyContainer.transform;
+            SS.MyInstantiate(enemyPref, Vector3.zero, enemyContainer);
         }
     }
 
