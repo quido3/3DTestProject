@@ -15,4 +15,9 @@ public class SS : MonoBehaviour
     {
         Instantiate(prefab, pos, Quaternion.identity);
     }
+
+    public static bool IsItInsideMesh()
+    {
+        return false;
+    }
 }

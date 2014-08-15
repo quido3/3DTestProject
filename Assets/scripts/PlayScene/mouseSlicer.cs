@@ -431,6 +431,7 @@ public class mouseSlicer : MonoBehaviour
         toBeSliced.GetComponent<MeshFilter>().sharedMesh = plane;
         DestroyImmediate(toBeSliced.GetComponent<MeshCollider>());
         toBeSliced.AddComponent<MeshCollider>();
+        toBeSliced.GetComponent<MeshCollider>().isTrigger = true;
         //--------------------------------------------------------------------------------------------
         //Second mesh
         planeVerts = new Vector3[vectorsLeft.Count];
@@ -476,7 +477,7 @@ public class mouseSlicer : MonoBehaviour
 
     private void killEnemiesInside(Mesh m)
     {
-        foreach (Transform e in enemyParent.transform)
+        /*foreach (Transform e in enemyParent.transform)
         {
             Vector3 spot = e.collider.bounds.center;
             Vector3 size = e.collider.bounds.size;
@@ -489,9 +490,10 @@ public class mouseSlicer : MonoBehaviour
         };
             if (PolyC.ContainsPoint(m.vertices, e.position))
             {
+                print("Destoying enemy");
                 Destroy(e.gameObject);
             }
-        }
+        }*/
     }
 
 

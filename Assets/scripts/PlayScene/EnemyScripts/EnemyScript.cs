@@ -8,6 +8,8 @@ public class EnemyScript : MonoBehaviour
     public Vector3 direction = Vector3.zero;
     public float threshold = 0.2f;
 
+    int stayCount = 0;
+
     float timer = 0;
 
     // Use this for initialization
@@ -41,17 +43,24 @@ public class EnemyScript : MonoBehaviour
 
     public void OnTriggerEnter(Collider collider)
     {
-        //print("trigger enter");
+        stayCount = 0;
+        print("first trigger enter at: " + Time.frameCount);
         hitted();
     }
 
     void OnTriggerStay(Collider other)
     {
-        //print("trigger stay");
+        stayCount++;
+        if (stayCount > 20)
+        {
+            Destroy(this.gameObject);
+        }
+        print("first trigger stay at: " + Time.frameCount);
     }
     void OnTriggerExit(Collider other)
     {
-        //print("trigger exit");
+        stayCount = 0;
+        print("first trigger exit at: " + Time.frameCount);
     }
 
     public void hitted()
