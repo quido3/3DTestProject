@@ -25,7 +25,6 @@ public class EnemyTwoDColliderScript : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        print("trigger enter 2D");
         if (collider.gameObject.tag == "OuterRing")
         {
             parent.hitted();

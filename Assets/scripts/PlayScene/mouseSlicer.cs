@@ -21,6 +21,10 @@ public class mouseSlicer : MonoBehaviour
     private Vector3 secondIN;
     private Vector3 secondOUT;
 
+    private List<Vector3> debugTrailList = new List<Vector3>();
+    private List<Vector3> debugFirstMeshList = new List<Vector3>();
+    private List<Vector3> debugSecondMeshList = new List<Vector3>();
+
     public GameObject enemyParent;
 
     private Vector3 impactPointIN = Vector3.zero, impactPointOUT = Vector3.zero;
@@ -48,8 +52,23 @@ public class mouseSlicer : MonoBehaviour
             centerPoints.Add(cutArea.GetComponent<MeshFilter>().sharedMesh.vertices[0]);
         }
         handleMouse();
-        Debug.DrawLine(Vector3.zero, firstOUT, Color.red);
-        Debug.DrawLine(Vector3.zero, firstIN, Color.green);
+        if (drawDebug)
+        {
+            DrawDebug();
+        }
+    }
+
+    private void DrawDebug()
+    {
+        foreach (Vector3 v in centerPoints)
+        {
+            print("draw");
+            Debug.DrawLine(v, new Vector3(0, 0, 0), Color.red);
+        }
+        /*foreach (Vector3 v in debugSecondMeshList)
+        {
+            Debug.DrawLine(v, new Vector3(15, 0, 0), Color.red);
+        }*/
     }
 
     private void drawLine()
@@ -83,7 +102,7 @@ public class mouseSlicer : MonoBehaviour
                 {
                     if (hit.transform.gameObject.tag != "OuterRing")
                     {
-                        return true;
+                        return false;
                     }
                 }
             }
@@ -349,6 +368,10 @@ public class mouseSlicer : MonoBehaviour
         float normedHorizontalR = (rCenterV.x + 1.0f) * 0.5f;
         float normedVerticalR = (rCenterV.y + 1.0f) * 0.5f;
         uvsRight[0] = new Vector2(normedHorizontalR, normedVerticalR);
+
+        centerPoints.Add(vectorsRight[0]);
+        centerPoints.Add(vectorsLeft[0]);
+
         //--------------------------------------------------------------------------------------------------
 
 
@@ -362,6 +385,7 @@ public class mouseSlicer : MonoBehaviour
             int index = i * 3;
             //Triangles first point is always the center
             rightTris[index + 0] = 0;
+            print(vectorsRight[rightTris[index + 0]]);
             //Second point is the next in the array
             rightTris[index + 1] = i + 1;
             //And third is still next
@@ -406,6 +430,10 @@ public class mouseSlicer : MonoBehaviour
         //third is the first vertice
         leftTris[lastTriangleIndex + 2] = 1;
 
+
+
+
+
         //Create the mesh and assing it to the object-------------------------------------------------------
         float area1 = 0, area2 = 0;
         Vector3[] planeVerts = new Vector3[vectorsRight.Count];
@@ -413,6 +441,7 @@ public class mouseSlicer : MonoBehaviour
         int[] planeTris = new int[rightTris.Length];
 
         vectorsRight.CopyTo(planeVerts);
+        debugFirstMeshList = vectorsRight;
         uvsRight.CopyTo(planeUVs);
         rightTris.CopyTo(planeTris, 0);
         //print("first UV length: " + uvsRight.Count + " , vert Length: " + vectorsRight.Count);
@@ -439,6 +468,7 @@ public class mouseSlicer : MonoBehaviour
         planeTris = new int[leftTris.Length];
 
         vectorsLeft.CopyTo(planeVerts);
+        debugSecondMeshList = vectorsLeft;
         uvsLeft.CopyTo(planeUVs);
         leftTris.CopyTo(planeTris, 0);
 
@@ -463,9 +493,6 @@ public class mouseSlicer : MonoBehaviour
             newPos = newMesh.transform.position;
             newPos.z = 4;
             newMesh.transform.position = newPos;
-
-            killEnemiesInside(plane);
-
         }
         else
         {
@@ -474,30 +501,6 @@ public class mouseSlicer : MonoBehaviour
             toBeSliced.transform.position = newPos;
         }
     }
-
-    private void killEnemiesInside(Mesh m)
-    {
-        /*foreach (Transform e in enemyParent.transform)
-        {
-            Vector3 spot = e.collider.bounds.center;
-            Vector3 size = e.collider.bounds.size;
-
-            Vector3[] enemyPoints = new Vector3[4] {
-                new Vector3(spot.x - (size.x/2),spot.y,spot.z),
-                new Vector3(spot.x + (size.x/2),spot.y,spot.z),
-                new Vector3(spot.x,spot.y - (size.y/2),spot.z),
-                new Vector3(spot.x,spot.y + (size.y/2),spot.z)
-        };
-            if (PolyC.ContainsPoint(m.vertices, e.position))
-            {
-                print("Destoying enemy");
-                Destroy(e.gameObject);
-            }
-        }*/
-    }
-
-
-
 
     private bool insideMesh(Vector3 v, GameObject g)
     {
@@ -680,6 +683,32 @@ public class mouseSlicer : MonoBehaviour
     {
         int count = 0;
         Vector3 average = Vector3.zero;
+
+        /*float bY = 0, bX = 0, sY = 0, sX = 0, z = vList[0].z;
+
+        foreach (Vector3 v in vList)
+        {
+            if (v.x < sX)
+            {
+                sX = v.x;
+            }
+            if (v.x > bX)
+            {
+                bX = v.x;
+            }
+            if (v.y < sY)
+            {
+                sY = v.y;
+            }
+            if (v.y > bY)
+            {
+                bY = v.y;
+            }
+
+        }
+        average = new Vector3((sX + bX) / 2, (sY + bY) / 2, z);*/
+
+
         foreach (Vector3 v in vList)
         {
             count++;

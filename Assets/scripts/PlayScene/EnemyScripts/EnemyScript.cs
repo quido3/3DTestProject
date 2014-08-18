@@ -10,6 +10,9 @@ public class EnemyScript : MonoBehaviour
 
     int stayCount = 0;
 
+    public int stayThreshold = 0;
+    public float wallCollideThreshold = 0;
+
     float timer = 0;
 
     // Use this for initialization
@@ -44,23 +47,21 @@ public class EnemyScript : MonoBehaviour
     public void OnTriggerEnter(Collider collider)
     {
         stayCount = 0;
-        print("first trigger enter at: " + Time.frameCount);
         hitted();
     }
 
     void OnTriggerStay(Collider other)
     {
         stayCount++;
-        if (stayCount > 20)
+        if (stayCount > stayThreshold)
         {
+            print("Enemy died");
             Destroy(this.gameObject);
         }
-        print("first trigger stay at: " + Time.frameCount);
     }
     void OnTriggerExit(Collider other)
     {
         stayCount = 0;
-        print("first trigger exit at: " + Time.frameCount);
     }
 
     public void hitted()
@@ -96,7 +97,7 @@ public class EnemyScript : MonoBehaviour
 
             direction = new Vector3(x, y, 0);
 
-            timer = 0.2f;
+            timer = wallCollideThreshold;
         }
     }
 }
