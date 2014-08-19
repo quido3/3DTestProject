@@ -684,7 +684,7 @@ public class mouseSlicer : MonoBehaviour
         int count = 0;
         Vector3 average = Vector3.zero;
 
-        /*float bY = 0, bX = 0, sY = 0, sX = 0, z = vList[0].z;
+        float bY = 0, bX = 0, sY = 0, sX = 0, z = vList[0].z;
 
         foreach (Vector3 v in vList)
         {
@@ -706,15 +706,39 @@ public class mouseSlicer : MonoBehaviour
             }
 
         }
-        average = new Vector3((sX + bX) / 2, (sY + bY) / 2, z);*/
+        float yDist = Mathf.Abs(sY) + Mathf.Abs(bY);
+        float xDist = Mathf.Abs(sX) + Mathf.Abs(bX);
+
+        if (yDist > xDist)
+        {
+            average.y = (sY + bY) / 2;
+            foreach (Vector3 v in vList)
+            {
+                if (v.y - )
+                {
+
+                }
+                count++;
+                average += v;
+            }
+        }
+        else
+        {
+            foreach (Vector3 v in vList)
+            {
+                count++;
+                average += v;
+            }
+        }
 
 
-        foreach (Vector3 v in vList)
+
+        /*foreach (Vector3 v in vList)
         {
             count++;
             average += v;
         }
-        average = average / count;
+        average = average / count;*/
         return average;
     }
 }
