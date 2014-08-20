@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: 52d5b04277e0e1945aae79e66b68b00f
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: Ruohot
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

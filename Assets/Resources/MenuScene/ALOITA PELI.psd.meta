@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: c317b4f762258af4fbac6dd2fbf3a8d8
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: ALOITA PELI
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

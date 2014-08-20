@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
+/*using UnityEditor;
 
 [CustomEditor(typeof(mouseSlicer))]
 public class customInspector : Editor
@@ -15,4 +15,4 @@ public class customInspector : Editor
 
         }
     }
-}
+}*/

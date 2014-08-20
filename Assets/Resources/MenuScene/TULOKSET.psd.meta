@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: 617bb7bbe98058c4ab4efe371a902d87
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: TULOKSET
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

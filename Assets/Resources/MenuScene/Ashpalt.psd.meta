@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: c9fef0d721af247459d2c06e30d78e7b
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: Ashpalt
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

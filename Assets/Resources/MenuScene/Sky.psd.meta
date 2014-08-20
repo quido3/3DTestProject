@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: d6a34cabd48ff75488afbce3a0cb092a
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: Sky
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

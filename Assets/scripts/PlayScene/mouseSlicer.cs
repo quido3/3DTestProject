@@ -39,9 +39,15 @@ public class mouseSlicer : MonoBehaviour
 
     private bool drawDebug = true;
 
+    bool onMobile = false;
+
     // Use this for initialization
     void Start()
     {
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            onMobile = true;
+        }
     }
 
     // Update is called once per frame
@@ -51,7 +57,15 @@ public class mouseSlicer : MonoBehaviour
         {
             centerPoints.Add(cutArea.GetComponent<MeshFilter>().sharedMesh.vertices[0]);
         }
-        handleMouse();
+        if (onMobile)
+        {
+            handleTouch();
+        }
+        else
+        {
+            handleMouse();
+        }
+
         if (drawDebug)
         {
             DrawDebug();
@@ -60,15 +74,20 @@ public class mouseSlicer : MonoBehaviour
 
     private void DrawDebug()
     {
-        foreach (Vector3 v in centerPoints)
+        int count = 0;
+        foreach (Vector3 v in debugTrailList)
         {
-            print("draw");
-            Debug.DrawLine(v, new Vector3(0, 0, 0), Color.red);
+            if (count < 3)
+            {
+                Debug.DrawLine(v, new Vector3(15, 0, 0), Color.blue);
+            }
+            else
+            {
+                Debug.DrawLine(v, new Vector3(15, 0, 0), Color.red);
+            }
+
+            count++;
         }
-        /*foreach (Vector3 v in debugSecondMeshList)
-        {
-            Debug.DrawLine(v, new Vector3(15, 0, 0), Color.red);
-        }*/
     }
 
     private void drawLine()
@@ -108,6 +127,46 @@ public class mouseSlicer : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private void handleTouch()
+    {
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            trailer.startTrail(Input.mousePosition);
+        }
+        if (Input.GetTouch(0).phase == TouchPhase.Moved)
+        {
+            if (checkEnemyCollision(trailer.getList()))
+            {
+                trailer.endTrail(Input.mousePosition);
+                liner.SetVertexCount(0);
+                trailer.startTrail(Input.mousePosition);
+            }
+            else
+            {
+                trailer.Add(Input.mousePosition);
+                drawLine();
+            }
+        }
+
+        if (Input.GetTouch(0).phase == TouchPhase.Ended)
+        {
+            liner.SetVertexCount(0);
+            trailer.endTrail(Input.mousePosition);
+            List<GameObject> hittedmeshes = getHittedMeshes(trailer.getList());
+            if (hittedmeshes != null && hittedmeshes.Count > 0)
+            {
+                foreach (GameObject g in hittedmeshes)
+                {
+                    slice(trailer.getList(), g);
+                }
+            }
+            else
+            {
+                print("Bad trail!");
+            }
+        }
     }
 
     private void handleMouse()
@@ -356,25 +415,29 @@ public class mouseSlicer : MonoBehaviour
         //Calculate center points of the meshes and put them as the firsts in the lists
         //print("LeftCount: " + vectorsLeft.Count);
         Vector3 lCenterV = calculateCenter(vectorsLeft);
-        vectorsLeft[0] = lCenterV;
+        vectorsLeft.Insert(0, lCenterV);
+        //vectorsLeft[0] = lCenterV;
         float normedHorizontalL = (lCenterV.x + 1.0f) * 0.5f;
         float normedVerticalL = (lCenterV.y + 1.0f) * 0.5f;
-        uvsLeft[0] = new Vector2(normedHorizontalL, normedVerticalL);
+        //uvsLeft[0] = new Vector2(normedHorizontalL, normedVerticalL);
+        uvsLeft.Insert(0, new Vector2(normedHorizontalL, normedVerticalL));
         //print("LeftCount: " + vectorsLeft.Count);
 
         //print("RightCount: " + vectorsRight.Count);
         Vector3 rCenterV = calculateCenter(vectorsRight);
-        vectorsRight[0] = rCenterV;
+        vectorsRight.Insert(0, rCenterV);
+        //vectorsRight[0] = rCenterV;
         float normedHorizontalR = (rCenterV.x + 1.0f) * 0.5f;
         float normedVerticalR = (rCenterV.y + 1.0f) * 0.5f;
-        uvsRight[0] = new Vector2(normedHorizontalR, normedVerticalR);
+        //uvsRight[0] = new Vector2(normedHorizontalR, normedVerticalR);
+        uvsRight.Insert(0, new Vector2(normedHorizontalR, normedVerticalR));
 
         centerPoints.Add(vectorsRight[0]);
         centerPoints.Add(vectorsLeft[0]);
 
         //--------------------------------------------------------------------------------------------------
 
-
+        debugTrailList = new List<Vector3>();
         //Triangle setting part-------------------------------------------------------------------------------
         //New stuff
         int[] rightTris = new int[vectorsRight.Count * 3];
@@ -385,7 +448,6 @@ public class mouseSlicer : MonoBehaviour
             int index = i * 3;
             //Triangles first point is always the center
             rightTris[index + 0] = 0;
-            print(vectorsRight[rightTris[index + 0]]);
             //Second point is the next in the array
             rightTris[index + 1] = i + 1;
             //And third is still next
@@ -401,12 +463,41 @@ public class mouseSlicer : MonoBehaviour
         rightTris[lastTriangleIndex + 1] = vectorsRight.Count - 1;
         //third is the first vertice
         rightTris[lastTriangleIndex + 2] = 1;
-
+        debugTrailList.Add(vectorsRight[rightTris[lastTriangleIndex + 0]]);
+        debugTrailList.Add(vectorsRight[rightTris[lastTriangleIndex + 1]]);
+        debugTrailList.Add(vectorsRight[rightTris[lastTriangleIndex + 2]]);
 
 
         //----------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //Second tris----------------------------
-        int[] leftTris = new int[vectorsLeft.Count * 3];
+        /*int[] leftTris = new int[vectorsLeft.Count * 3];
         //Iterate through the all pie slices.
         for (int i = 0; i + 2 < vectorsLeft.Count; ++i)
         {
@@ -428,11 +519,98 @@ public class mouseSlicer : MonoBehaviour
         //Second is the last vertice
         leftTris[lastTriangleIndex + 1] = vectorsLeft.Count - 1;
         //third is the first vertice
-        leftTris[lastTriangleIndex + 2] = 1;
+        leftTris[lastTriangleIndex + 2] = 1;*/
+
+
+        int[] leftTris = new int[vectorsLeft.Count * 3];
+        //Iterate through the all pie slices.
+        bool allDone = false;
+        int left = 0;
+        int right = vectorsLeft.Count - 1;
+        int ind = 0;
+        //Here set the first tris.
+        left++;
+        bool leftBig = true;
+        while (!allDone)
+        {
+            print("left: " + left + " , right: " + right);
+            if (right != left)
+            {
+                int index = ind * 3;
+                //Triangles first point is always the center
+                leftTris[index + 0] = right;
+                //Second point is the next in the array
+                leftTris[index + 1] = left;
+                //And third is still next
+                if (leftBig)
+                {
+                    left++;
+                    leftTris[index + 2] = left;
+                    leftBig = false;
+                }
+                else
+                {
+                    right--;
+                    leftTris[index + 2] = right;
+                    leftBig = true;
+                }
+            }
+            else
+            {
+                allDone = true;
+            }
+            ind++;
+        }
+
+
+        /*for (int i = 0; i + 3 < vectorsLeft.Count; ++i)
+        {
+            //Index is the place where the iteration should start with the tris. Every iteration places three indexes to the tris array.
+            int index = i * 3;
+            //Triangles first point is always the center
+            leftTris[index + 0] = i + 1;
+            //Second point is the next in the array
+            leftTris[index + 1] = i + 2;
+            //And third is still next
+            leftTris[index + 2] = i + 3;
+        }
+
+        // The last triangle has to wrap around to the first vert so we do this last and outside the loop
+        //Index for the first vert of the last tris
+        lastTriangleIndex = leftTris.Length - 3;
+        //First vert is always center
+        leftTris[lastTriangleIndex + 0] = 0;
+        //Second is the last vertice
+        leftTris[lastTriangleIndex + 1] = vectorsLeft.Count - 1;
+        //third is the first vertice
+        leftTris[lastTriangleIndex + 2] = 1;*/
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //debugTrailList.Add(vectorsLeft[leftTris[lastTriangleIndex + 0]]);
+        //debugTrailList.Add(vectorsLeft[leftTris[lastTriangleIndex + 1]]);
+        //debugTrailList.Add(vectorsLeft[leftTris[lastTriangleIndex + 2]]);
 
         //Create the mesh and assing it to the object-------------------------------------------------------
         float area1 = 0, area2 = 0;
@@ -458,6 +636,11 @@ public class mouseSlicer : MonoBehaviour
         area1 = calculaterMeshArea(plane);
 
         toBeSliced.GetComponent<MeshFilter>().sharedMesh = plane;
+
+        /*toBeSliced.GetComponent<MeshFilter>().sharedMesh.vertices = planeVerts;
+        toBeSliced.GetComponent<MeshFilter>().sharedMesh.triangles = planeTris;
+        toBeSliced.GetComponent<MeshFilter>().sharedMesh.uv = planeUVs;*/
+
         DestroyImmediate(toBeSliced.GetComponent<MeshCollider>());
         toBeSliced.AddComponent<MeshCollider>();
         toBeSliced.GetComponent<MeshCollider>().isTrigger = true;
@@ -681,11 +864,11 @@ public class mouseSlicer : MonoBehaviour
 
     private Vector3 calculateCenter(List<Vector3> vList)
     {
-        int count = 0;
         Vector3 average = Vector3.zero;
-
-        float bY = 0, bX = 0, sY = 0, sX = 0, z = vList[0].z;
-
+        int count = 0;
+        /*float bY = 0, bX = 0, sY = 0, sX = 0, z = vList[0].z;
+        average.z = z;
+        float centerThreshold = 1;
         foreach (Vector3 v in vList)
         {
             if (v.x < sX)
@@ -711,34 +894,66 @@ public class mouseSlicer : MonoBehaviour
 
         if (yDist > xDist)
         {
+            int count = 0;
             average.y = (sY + bY) / 2;
+            sY = 0;
+            bY = 0;
             foreach (Vector3 v in vList)
             {
-                if (v.y - )
+                float distFrom = distFrom = v.y - Mathf.Abs(average.y);
+                if (Mathf.Abs(distFrom) < centerThreshold)
                 {
-
+                    count++;
+                    if (v.x < sX)
+                    {
+                        sX = v.x;
+                        x1 = v;
+                    }
+                    if (v.x > bX)
+                    {
+                        bX = v.x;
+                        x2 = v;
+                    }
                 }
-                count++;
-                average += v;
             }
+            average.x = (sX + bX) / 2;
         }
         else
         {
+            int count = 0;
+            average.x = (sX + bX) / 2;
+            sX = 0;
+            bX = 0;
             foreach (Vector3 v in vList)
             {
-                count++;
-                average += v;
+                float distFrom = distFrom = v.x - Mathf.Abs(average.x);
+
+                print("x: " + distFrom);
+
+                if (Mathf.Abs(distFrom) < centerThreshold)
+                {
+                    count++;
+                    if (v.x < sY)
+                    {
+                        sY = v.y;
+                    }
+                    if (v.y > bY)
+                    {
+                        bY = v.y;
+                    }
+                }
             }
-        }
+            average.y = (sY + bY) / 2;
+        }*/
 
 
 
-        /*foreach (Vector3 v in vList)
+        foreach (Vector3 v in vList)
         {
             count++;
             average += v;
         }
-        average = average / count;*/
+        average = average / count;
         return average;
     }
 }
