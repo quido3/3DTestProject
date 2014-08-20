@@ -8,6 +8,8 @@ public class SliceTrailer : MonoBehaviour
     List<List<Vector3>> trailList = new List<List<Vector3>>();
     List<Vector3> vList = null;
 
+    private float differThroshold = 0.7f;
+
     public void Add(Vector3 v)
     {
         if (vectorsDiffer(v, vList[vList.Count - 1]))
@@ -37,7 +39,7 @@ public class SliceTrailer : MonoBehaviour
         Vector3 difference = fir - second;
         float X = Mathf.Abs(difference.x);
         float Y = Mathf.Abs(difference.y);
-        if (X > 0.1f || Y > 0.1f)
+        if (X > differThroshold || Y > differThroshold)
         {
             return true;
         }

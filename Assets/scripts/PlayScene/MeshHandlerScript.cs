@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class MeshHandlerScript : MonoBehaviour
 {
     public GameObject firstMesh;
-
+    public 
     Vector3 originalPos = Vector3.zero;
     List<GameObject> meshList = new List<GameObject>();
 
@@ -118,6 +118,6 @@ public class MeshHandlerScript : MonoBehaviour
 
     public void addMesh(GameObject newMesh)
     {
-        meshList.Add(newMesh);
+        //meshList.Add(newMesh);
     }
 }

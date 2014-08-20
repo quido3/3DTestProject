@@ -14,7 +14,7 @@ public class mouseSlicer : MonoBehaviour
     public LineRenderer liner;
     public GameObject meshParent;
     public GameObject meshPref;
-    public MeshHandlerScript meshHandler;
+    public MeshHandler2 meshHandler;
 
     private Vector3 firstOUT;
     private Vector3 firstIN;
@@ -344,13 +344,14 @@ public class mouseSlicer : MonoBehaviour
             //Center point is not carried to the new meshes
             if (isNotCenterPoint(origV))
             {
+                bool addVector = true;
                 //Indicates the array that the vertice should be added to
-
                 //Checks if the currect vector is either of the closest ones and sets the indice to correct side
                 foreach (Vector3 cV in closests)
                 {
                     if (cV == origV)
                     {
+                        addVector = false;
                         if (listIndice == leftSide)
                         {
                             listIndice = rightSide;
@@ -408,8 +409,10 @@ public class mouseSlicer : MonoBehaviour
                         }
                     }
                 }
-                addVertice(VlistList[listIndice], origV, UVlistList[listIndice]);
-
+                if (addVector)
+                {
+                    addVertice(VlistList[listIndice], origV, UVlistList[listIndice]);
+                }
             }
         }
         //Calculate center points of the meshes and put them as the firsts in the lists
@@ -440,7 +443,7 @@ public class mouseSlicer : MonoBehaviour
         debugTrailList = new List<Vector3>();
         //Triangle setting part-------------------------------------------------------------------------------
         //New stuff
-        int[] rightTris = new int[vectorsRight.Count * 3];
+        /*int[] rightTris = new int[vectorsRight.Count * 3];
         //Iterate through the all pie slices.
         for (int i = 0; i + 2 < vectorsRight.Count; ++i)
         {
@@ -465,7 +468,47 @@ public class mouseSlicer : MonoBehaviour
         rightTris[lastTriangleIndex + 2] = 1;
         debugTrailList.Add(vectorsRight[rightTris[lastTriangleIndex + 0]]);
         debugTrailList.Add(vectorsRight[rightTris[lastTriangleIndex + 1]]);
-        debugTrailList.Add(vectorsRight[rightTris[lastTriangleIndex + 2]]);
+        debugTrailList.Add(vectorsRight[rightTris[lastTriangleIndex + 2]]);*/
+
+        int[] rightTris = new int[vectorsRight.Count * 3];
+        //Iterate through the all pie slices.
+        bool allDone = false;
+        int left = 0;
+        int right = vectorsRight.Count - 1;
+        int ind = 0;
+        //Here set the first tris.
+        left++;
+        bool leftBig = true;
+        while (!allDone)
+        {
+            //print("left: " + left + " , right: " + right);
+            if (right != left)
+            {
+                int index = ind * 3;
+                //Triangles first point is always the center
+                rightTris[index + 0] = right;
+                //Second point is the next in the array
+                rightTris[index + 1] = left;
+                //And third is still next
+                if (leftBig)
+                {
+                    left++;
+                    rightTris[index + 2] = left;
+                    leftBig = false;
+                }
+                else
+                {
+                    right--;
+                    rightTris[index + 2] = right;
+                    leftBig = true;
+                }
+            }
+            else
+            {
+                allDone = true;
+            }
+            ind++;
+        }
 
 
         //----------------------------------------------------------------------------------------
@@ -524,34 +567,39 @@ public class mouseSlicer : MonoBehaviour
 
         int[] leftTris = new int[vectorsLeft.Count * 3];
         //Iterate through the all pie slices.
-        bool allDone = false;
-        int left = 0;
-        int right = vectorsLeft.Count - 1;
-        int ind = 0;
+        allDone = false;
+        left = 0;
+        right = vectorsLeft.Count - 1;
+        ind = 0;
         //Here set the first tris.
         left++;
-        bool leftBig = true;
+        leftBig = true;
         while (!allDone)
         {
-            print("left: " + left + " , right: " + right);
+            //print("left: " + left + " , right: " + right);
             if (right != left)
             {
+                print("new Polygon-------------------------------");
                 int index = ind * 3;
                 //Triangles first point is always the center
                 leftTris[index + 0] = right;
+                print(vectorsLeft[leftTris[index + 0]]);
                 //Second point is the next in the array
                 leftTris[index + 1] = left;
+                print(vectorsLeft[leftTris[index + 1]]);
                 //And third is still next
                 if (leftBig)
                 {
                     left++;
                     leftTris[index + 2] = left;
+                    print(vectorsLeft[leftTris[index + 2]]);
                     leftBig = false;
                 }
                 else
                 {
                     right--;
                     leftTris[index + 2] = right;
+                    print(vectorsLeft[leftTris[index + 2]]);
                     leftBig = true;
                 }
             }
@@ -561,42 +609,6 @@ public class mouseSlicer : MonoBehaviour
             }
             ind++;
         }
-
-
-        /*for (int i = 0; i + 3 < vectorsLeft.Count; ++i)
-        {
-            //Index is the place where the iteration should start with the tris. Every iteration places three indexes to the tris array.
-            int index = i * 3;
-            //Triangles first point is always the center
-            leftTris[index + 0] = i + 1;
-            //Second point is the next in the array
-            leftTris[index + 1] = i + 2;
-            //And third is still next
-            leftTris[index + 2] = i + 3;
-        }
-
-        // The last triangle has to wrap around to the first vert so we do this last and outside the loop
-        //Index for the first vert of the last tris
-        lastTriangleIndex = leftTris.Length - 3;
-        //First vert is always center
-        leftTris[lastTriangleIndex + 0] = 0;
-        //Second is the last vertice
-        leftTris[lastTriangleIndex + 1] = vectorsLeft.Count - 1;
-        //third is the first vertice
-        leftTris[lastTriangleIndex + 2] = 1;*/
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -667,21 +679,26 @@ public class mouseSlicer : MonoBehaviour
         GameObject newMesh = (GameObject)Instantiate(meshPref, new Vector3(0, 0, 0), Quaternion.identity);
         newMesh.transform.localPosition = new Vector3(0, 0, 0);
         newMesh.GetComponent<MeshFilter>().sharedMesh = plane;
+        int e = 0;
+
         newMesh.AddComponent<MeshCollider>();
-        meshHandler.addMesh(newMesh);
+        //meshHandler.addMesh(newMesh);
         newMesh.transform.parent = meshParent.transform;
+        meshHandler.meshCutted();
         Vector3 newPos = Vector3.zero;
         if (area2 < area1)
         {
             newPos = newMesh.transform.position;
             newPos.z = 4;
             newMesh.transform.position = newPos;
+            Destroy(newMesh);
         }
         else
         {
             newPos = toBeSliced.transform.position;
             newPos.z = 4;
             toBeSliced.transform.position = newPos;
+            Destroy(toBeSliced);
         }
     }
 
