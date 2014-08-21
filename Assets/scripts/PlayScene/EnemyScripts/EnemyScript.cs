@@ -15,6 +15,8 @@ public class EnemyScript : MonoBehaviour
 
     float timer = 0;
 
+    float stayTriggerTime = 0;
+
     // Use this for initialization
     void Start()
     {
@@ -24,6 +26,13 @@ public class EnemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float tmp = (Time.time - stayTriggerTime);
+        if (tmp > 0.1)
+        {
+            print("destroy");
+            Destroy(this.gameObject);
+        }
+
         if (timer <= 0)
         {
             int chance = Random.Range(0, 100);
@@ -36,7 +45,11 @@ public class EnemyScript : MonoBehaviour
         {
             timer -= Time.deltaTime;
         }
-        move();
+        if (!float.IsNaN(direction.x))
+        {
+            move();
+        }
+
     }
 
     private void move()
@@ -52,16 +65,18 @@ public class EnemyScript : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        stayCount++;
-        if (stayCount > stayThreshold)
-        {
-            print("Enemy died");
-            Destroy(this.gameObject);
-        }
+        stayTriggerTime = Time.time;
+        /* stayCount++;
+         if (stayCount > stayThreshold)
+         {
+             print("Enemy died");
+             Destroy(this.gameObject);
+         }*/
     }
     void OnTriggerExit(Collider other)
     {
-        stayCount = 0;
+        print("exit trigger");
+        hitted();
     }
 
     public void hitted()

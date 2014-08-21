@@ -3,13 +3,14 @@ using System.Collections;
 
 public class MeshHandler2 : MonoBehaviour
 {
-
-    bool instantiated = false;
     public GameObject meshPref;
     public GameObject meshParent;
     public float riseThreshold = 0.1f;
 
-    private GameObject risingObject;
+    public GameObject upObject;
+
+    public GameObject risingObject;
+
 
     // Use this for initialization
     void Start()
@@ -24,36 +25,63 @@ public class MeshHandler2 : MonoBehaviour
         {
             if (risingObject.transform.position.z > 0)
             {
-                Vector3 newPos = this.transform.position;
+                Vector3 newPos = risingObject.transform.position;
                 newPos.z -= riseThreshold;
                 risingObject.transform.position = newPos;
             }
             else
             {
-                Vector3 newPos = this.transform.position;
+                Vector3 newPos = risingObject.transform.position;
                 newPos.z = 0;
-                meshUp();
                 risingObject.transform.position = newPos;
+                meshUp();
             }
         }
     }
 
     public void meshUp()
     {
-        foreach (GameObject t in meshParent.transform)
+        GameObject toDestroy = null;
+        foreach (Transform t in meshParent.transform)
         {
-            if (t != risingObject)
+            if (t.gameObject != risingObject)
             {
-                Destroy(t);
+                toDestroy = t.gameObject;
             }
         }
+
+        
+
+        upObject = risingObject;
+        upObject.GetComponent<MeshCollider>().enabled = true;
+        changeMaterialColor(upObject, Color.white);
+        
+        risingObject = null;
+        Destroy(toDestroy);
     }
 
     public void meshCutted()
     {
-        instantiated = true;
-        risingObject = (GameObject)Instantiate(meshPref, new Vector3(0, 0, 4), Quaternion.identity);
-        risingObject.transform.parent = meshParent.transform;
+        if (risingObject == null)
+        {
+            risingObject = (GameObject)Instantiate(meshPref, new Vector3(0, 0, 4), Quaternion.identity);
+            risingObject.transform.parent = meshParent.transform;
+            risingObject.GetComponent<MeshCollider>().enabled = false;
+            changeMaterialColor(risingObject, Color.grey);
+        }
+    }
+
+    private void changeMaterialColor(GameObject g, Color color)
+    {
+        foreach (Material mat in g.GetComponent<MeshRenderer>().materials)
+        {
+            mat.SetColor("_Color", color);
+        }
+    }
+
+    public GameObject getSliceObject()
+    {
+        return upObject;
     }
 
 }

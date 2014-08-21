@@ -29,12 +29,6 @@ public class mouseSlicer : MonoBehaviour
 
     private Vector3 impactPointIN = Vector3.zero, impactPointOUT = Vector3.zero;
 
-    private int inIndex = 0, outIndex = 0;
-
-    private Vector3 d1 = Vector3.zero, d2 = Vector3.zero, d3 = Vector3.zero;
-
-    private Vector3 tmpV = Vector3.zero;
-
     List<Vector3> centerPoints = new List<Vector3>();
 
     private bool drawDebug = true;
@@ -121,7 +115,7 @@ public class mouseSlicer : MonoBehaviour
                 {
                     if (hit.transform.gameObject.tag != "OuterRing")
                     {
-                        return false;
+                        return true;
                     }
                 }
             }
@@ -259,13 +253,9 @@ public class mouseSlicer : MonoBehaviour
         //Initial stuff------------------
         //Mesh stuffz
         MeshFilter mf = toBeSliced.GetComponent<MeshFilter>();
-        Mesh tmpMesh = new Mesh();
 
         //Original meshes stuffz
         Vector3[] origVerts = mf.sharedMesh.vertices;
-        Vector2[] origUvs = mf.sharedMesh.uv;
-        int[] origTris = mf.sharedMesh.triangles;
-        Vector3[] origNorms = mf.sharedMesh.normals;
 
         //Trail vectors
         List<Vector3> trailVs = trailer.getList();
@@ -579,27 +569,27 @@ public class mouseSlicer : MonoBehaviour
             //print("left: " + left + " , right: " + right);
             if (right != left)
             {
-                print("new Polygon-------------------------------");
+                //print("new Polygon-------------------------------");
                 int index = ind * 3;
                 //Triangles first point is always the center
                 leftTris[index + 0] = right;
-                print(vectorsLeft[leftTris[index + 0]]);
+                //print(vectorsLeft[leftTris[index + 0]]);
                 //Second point is the next in the array
                 leftTris[index + 1] = left;
-                print(vectorsLeft[leftTris[index + 1]]);
+                //print(vectorsLeft[leftTris[index + 1]]);
                 //And third is still next
                 if (leftBig)
                 {
                     left++;
                     leftTris[index + 2] = left;
-                    print(vectorsLeft[leftTris[index + 2]]);
+                    //print(vectorsLeft[leftTris[index + 2]]);
                     leftBig = false;
                 }
                 else
                 {
                     right--;
                     leftTris[index + 2] = right;
-                    print(vectorsLeft[leftTris[index + 2]]);
+                    //print(vectorsLeft[leftTris[index + 2]]);
                     leftBig = true;
                 }
             }
@@ -679,7 +669,6 @@ public class mouseSlicer : MonoBehaviour
         GameObject newMesh = (GameObject)Instantiate(meshPref, new Vector3(0, 0, 0), Quaternion.identity);
         newMesh.transform.localPosition = new Vector3(0, 0, 0);
         newMesh.GetComponent<MeshFilter>().sharedMesh = plane;
-        int e = 0;
 
         newMesh.AddComponent<MeshCollider>();
         //meshHandler.addMesh(newMesh);
@@ -739,9 +728,6 @@ public class mouseSlicer : MonoBehaviour
         firstOUT = Vector3.zero;
         secondOUT = Vector3.zero;
 
-        inIndex = 0;
-        outIndex = 0;
-
         bool goneIn = false;
         bool goneOut = false;
         for (int i = 0; i < trail.Count; i++)
@@ -765,7 +751,6 @@ public class mouseSlicer : MonoBehaviour
                 if (isInside == true)
                 {
                     firstIN = trail[i];
-                    inIndex = i;
                     if (i - 1 >= 0)
                     {
                         firstOUT = trail[i - 1];
@@ -783,7 +768,6 @@ public class mouseSlicer : MonoBehaviour
                 if (isInside == false)
                 {
                     secondOUT = trail[i];
-                    outIndex = i;
                     if (i - 1 >= 0)
                     {
                         secondIN = trail[i - 1];
@@ -883,88 +867,6 @@ public class mouseSlicer : MonoBehaviour
     {
         Vector3 average = Vector3.zero;
         int count = 0;
-        /*float bY = 0, bX = 0, sY = 0, sX = 0, z = vList[0].z;
-        average.z = z;
-        float centerThreshold = 1;
-        foreach (Vector3 v in vList)
-        {
-            if (v.x < sX)
-            {
-                sX = v.x;
-            }
-            if (v.x > bX)
-            {
-                bX = v.x;
-            }
-            if (v.y < sY)
-            {
-                sY = v.y;
-            }
-            if (v.y > bY)
-            {
-                bY = v.y;
-            }
-
-        }
-        float yDist = Mathf.Abs(sY) + Mathf.Abs(bY);
-        float xDist = Mathf.Abs(sX) + Mathf.Abs(bX);
-
-        if (yDist > xDist)
-        {
-            int count = 0;
-            average.y = (sY + bY) / 2;
-            sY = 0;
-            bY = 0;
-            foreach (Vector3 v in vList)
-            {
-                float distFrom = distFrom = v.y - Mathf.Abs(average.y);
-                if (Mathf.Abs(distFrom) < centerThreshold)
-                {
-                    count++;
-                    if (v.x < sX)
-                    {
-                        sX = v.x;
-                        x1 = v;
-                    }
-                    if (v.x > bX)
-                    {
-                        bX = v.x;
-                        x2 = v;
-                    }
-                }
-            }
-            average.x = (sX + bX) / 2;
-        }
-        else
-        {
-            int count = 0;
-            average.x = (sX + bX) / 2;
-            sX = 0;
-            bX = 0;
-            foreach (Vector3 v in vList)
-            {
-                float distFrom = distFrom = v.x - Mathf.Abs(average.x);
-
-                print("x: " + distFrom);
-
-                if (Mathf.Abs(distFrom) < centerThreshold)
-                {
-                    count++;
-                    if (v.x < sY)
-                    {
-                        sY = v.y;
-                    }
-                    if (v.y > bY)
-                    {
-                        bY = v.y;
-                    }
-                }
-            }
-            average.y = (sY + bY) / 2;
-        }*/
-
-
-
         foreach (Vector3 v in vList)
         {
             count++;
