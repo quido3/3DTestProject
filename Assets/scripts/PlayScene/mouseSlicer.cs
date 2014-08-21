@@ -16,6 +16,8 @@ public class mouseSlicer : MonoBehaviour
     public GameObject meshPref;
     public MeshHandler2 meshHandler;
 
+    public LiquidScript liquider;
+
     private Vector3 firstOUT;
     private Vector3 firstIN;
     private Vector3 secondIN;
@@ -681,6 +683,7 @@ public class mouseSlicer : MonoBehaviour
             newPos.z = 4;
             newMesh.transform.position = newPos;
             Destroy(newMesh);
+            liquider.addLiquid(area2);
         }
         else
         {
@@ -688,6 +691,7 @@ public class mouseSlicer : MonoBehaviour
             newPos.z = 4;
             toBeSliced.transform.position = newPos;
             Destroy(toBeSliced);
+            liquider.addLiquid(area1);
         }
     }
 
