@@ -27,7 +27,7 @@ public class EnemyScript : MonoBehaviour
     void Update()
     {
         float tmp = (Time.time - stayTriggerTime);
-        if (tmp > 0.1)
+        if (stayTriggerTime != 0 && tmp > 0.1)
         {
             print("destroy");
             Destroy(this.gameObject);

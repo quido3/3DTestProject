@@ -11,6 +11,8 @@ public class MeshHandler2 : MonoBehaviour
 
     public GameObject risingObject;
 
+    public EnemyHandlerScript enemyHandler;
+
 
     // Use this for initialization
     void Start()
@@ -50,14 +52,16 @@ public class MeshHandler2 : MonoBehaviour
             }
         }
 
-        
-
         upObject = risingObject;
         upObject.GetComponent<MeshCollider>().enabled = true;
         changeMaterialColor(upObject, Color.white);
-        
+        enemyHandler.spawnEnemies(10);
         risingObject = null;
         Destroy(toDestroy);
+
+        
+
+
     }
 
     public void meshCutted()
