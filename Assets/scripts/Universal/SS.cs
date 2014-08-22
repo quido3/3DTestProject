@@ -3,6 +3,10 @@ using System.Collections;
 
 public class SS : MonoBehaviour
 {
+
+    public static string Level = "LevelPref";
+    public static string Points = "PointsPref";
+
     public static void MyInstantiate(GameObject prefab, Vector3 pos, GameObject parent)
     {
         GameObject go = (GameObject)Instantiate(prefab);
