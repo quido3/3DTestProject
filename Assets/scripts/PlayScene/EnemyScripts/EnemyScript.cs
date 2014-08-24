@@ -8,6 +8,9 @@ public class EnemyScript : MonoBehaviour
     public Vector3 direction = Vector3.zero;
     public float threshold = 0.2f;
 
+    private SceneScript sceneController;
+    public int points = 0;
+
     int stayCount = 0;
 
     public int stayThreshold = 0;
@@ -20,6 +23,8 @@ public class EnemyScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        this.sceneController = GameObject.Find("SceneScript").GetComponent<SceneScript>();
+        this.threshold = 0.05f + ((PlayerPrefs.GetInt(SS.Points) / 1000) * 0.05f);
         direction = new Vector3(Random.Range(-threshold, threshold), Random.Range(-threshold, threshold));
     }
 
@@ -30,6 +35,7 @@ public class EnemyScript : MonoBehaviour
         if (stayTriggerTime != 0 && tmp > 0.1)
         {
             print("destroy");
+            sceneController.addPoints(points);
             Destroy(this.gameObject);
         }
 
