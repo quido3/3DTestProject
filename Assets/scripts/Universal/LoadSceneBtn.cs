@@ -15,7 +15,10 @@ public class LoadSceneBtn : MonoBehaviour
         }
         if (loadPlayScene)
         {
-            Application.LoadLevel(1);
+            if (GameObject.Find("GPSTexture").GetComponent<TextureScroller>().travelDone())
+            {
+                Application.LoadLevel(1);
+            }
         }
     }
 
