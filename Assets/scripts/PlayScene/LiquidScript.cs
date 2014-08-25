@@ -29,10 +29,7 @@ public class LiquidScript : MonoBehaviour
         float current = m.GetFloat("_Cutoff");
 
         float toAdd = (meshArea / aboutWholeMeshSize) * 200;
-        print(toAdd / full);
-        print(current);
         current -= toAdd / full;
-        print(current);
         m.SetFloat("_Cutoff", current);
         sceneHandler.addPoints((int)(toAdd));
         if (current <= 0)

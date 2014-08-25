@@ -24,13 +24,18 @@ public class EnemyScript : MonoBehaviour
     void Start()
     {
         this.sceneController = GameObject.Find("SceneScript").GetComponent<SceneScript>();
-        this.threshold = 0.05f + ((PlayerPrefs.GetInt(SS.Points) / 1000) * 0.05f);
         direction = new Vector3(Random.Range(-threshold, threshold), Random.Range(-threshold, threshold));
+    }
+
+    public void setSpeed(float speed)
+    {
+        this.threshold = speed;
     }
 
     // Update is called once per frame
     void Update()
     {
+        print(threshold);
         float tmp = (Time.time - stayTriggerTime);
         if (stayTriggerTime != 0 && tmp > 0.1)
         {
@@ -72,16 +77,9 @@ public class EnemyScript : MonoBehaviour
     void OnTriggerStay(Collider other)
     {
         stayTriggerTime = Time.time;
-        /* stayCount++;
-         if (stayCount > stayThreshold)
-         {
-             print("Enemy died");
-             Destroy(this.gameObject);
-         }*/
     }
     void OnTriggerExit(Collider other)
     {
-        print("exit trigger");
         hitted();
     }
 

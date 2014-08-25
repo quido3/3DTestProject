@@ -15,6 +15,7 @@ public class mouseSlicer : MonoBehaviour
     public GameObject meshParent;
     public GameObject meshPref;
     public MeshHandler2 meshHandler;
+    public SceneScript sceneHandler;
 
     public LiquidScript liquider;
 
@@ -115,6 +116,10 @@ public class mouseSlicer : MonoBehaviour
                 Debug.DrawLine(v, v2, Color.green);
                 if (hit.transform != null)
                 {
+                    if (hit.transform.gameObject.tag != "BigEnemy")
+                    {
+                        sceneHandler.EndGame();
+                    }
                     if (hit.transform.gameObject.tag != "OuterRing")
                     {
                         return true;
@@ -200,7 +205,6 @@ public class mouseSlicer : MonoBehaviour
             }
             else
             {
-                print("Bad trail!");
             }
         }
     }

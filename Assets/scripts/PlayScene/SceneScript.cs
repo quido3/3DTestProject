@@ -31,11 +31,22 @@ public class SceneScript : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
+    public void EndGame()
+    {
+        SavePrefs();
+        Application.LoadLevel(2);
+    }
+
+    private void SavePrefs()
+    {
+        PlayerPrefs.SetInt(SS.Level, currentLevel);
+        PlayerPrefs.SetInt(SS.Points, currentPoints);
+    }
+
     public void levelClear()
     {
         currentLevel++;
-        PlayerPrefs.SetInt(SS.Level, currentLevel);
-        PlayerPrefs.SetInt(SS.Points, currentPoints);
+        SavePrefs();
         Application.LoadLevel(0);
     }
 }

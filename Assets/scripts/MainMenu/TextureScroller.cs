@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class TextureScroller : MonoBehaviour
 {
 
-    private float scrollSpeed = 0.01F;
+    private float scrollSpeed = 0.03F;
 
     int level;
 
@@ -38,7 +38,7 @@ public class TextureScroller : MonoBehaviour
             scroller.startScrolls();
             if (mat.GetTextureOffset("_MainTex").y < levelOffsets[level - 1])
             {
-                float offset = Time.time * scrollSpeed;
+                float offset = mat.GetTextureOffset("_MainTex").y + Time.deltaTime * scrollSpeed;
                 renderer.material.SetTextureOffset("_MainTex", new Vector2(0, offset));
             }
             else
