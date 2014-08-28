@@ -21,14 +21,13 @@ public class TopSceneSript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        newScore = PlayerPrefs.GetInt(SS.Level);
-        newScore = 100;
+        newScore = PlayerPrefs.GetInt(SS.Points);
         print(newScore);
         scoreList = new List<int>();
         bool added = false;
         for (int i = 1; i <= 10; i++)
         {
-            int score = PlayerPrefs.GetInt("score" + i);
+            int score = PlayerPrefs.GetInt("score" + i, 9);
             if (score < newScore && added == false)
             {
                 print("add score");
@@ -41,7 +40,7 @@ public class TopSceneSript : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             print(scoreList[i]);
-            PlayerPrefs.SetInt("score" + i, scoreList[i]);
+            PlayerPrefs.SetInt("score" + (i + 1), scoreList[i]);
         }
         titleSize = Screen.height / 7;
         textSize = (Screen.height - titleSize) / 12;
@@ -65,11 +64,11 @@ public class TopSceneSript : MonoBehaviour
         int newScoreSize = Screen.height / 8;
         titleStyle.fontSize = newScoreSize;
         GUI.Label(new Rect(0, startSpot.y + title2Size, Screen.width / 2, newScoreSize), "" + newScore, titleStyle);
-        for (int i = 0; i < 10; i++)
+        for (int i = 1; i <= 10; i++)
         {
             float spotX = startSpot.x;
             float spotY = startSpot.y + (addAmount.y * i);
-            GUI.Label(new Rect(spotX, spotY, Screen.width, textSize), "1. " + scoreList[i], style);
+            GUI.Label(new Rect(spotX, spotY, Screen.width, textSize), i + ". " + scoreList[i - 1], style);
         }
     }
 }

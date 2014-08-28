@@ -6,6 +6,7 @@ public class LoadSceneBtn : MonoBehaviour
 
     public bool loadMainMenu = false;
     public bool loadPlayScene = false;
+    public bool loadScoreScreen = false;
 
     void OnMouseDown()
     {
@@ -19,6 +20,10 @@ public class LoadSceneBtn : MonoBehaviour
             {
                 Application.LoadLevel(1);
             }
+        }
+        if (loadScoreScreen)
+        {
+            Application.LoadLevel(2);
         }
     }
 

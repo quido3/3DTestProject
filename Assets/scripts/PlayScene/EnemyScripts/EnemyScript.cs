@@ -35,7 +35,6 @@ public class EnemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(threshold);
         float tmp = (Time.time - stayTriggerTime);
         if (stayTriggerTime != 0 && tmp > 0.1)
         {

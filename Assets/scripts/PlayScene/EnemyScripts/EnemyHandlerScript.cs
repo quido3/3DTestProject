@@ -26,7 +26,6 @@ public class EnemyHandlerScript : MonoBehaviour
     public void spawnEnemies(int amount)
     {
         float speed = 0.02f + (PlayerPrefs.GetInt(SS.Level) * 0.002f);
-        print(PlayerPrefs.GetInt(SS.Level));
         print("spawning enemies");
         GameObject g;
         for (int i = 0; i < amount; i++)

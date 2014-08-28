@@ -12,7 +12,15 @@ public class LiquidScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        full = 500 + PlayerPrefs.GetInt(SS.Level) * 250;
+        int lvl = PlayerPrefs.GetInt(SS.Level);
+        if (lvl >= 7)
+        {
+            full = 10000;
+        }
+        else
+        {
+            full = 500 + lvl * 250;
+        }
         m = liquid.GetComponent<MeshRenderer>().material;
     }
 

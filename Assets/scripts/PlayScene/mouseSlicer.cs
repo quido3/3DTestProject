@@ -41,6 +41,7 @@ public class mouseSlicer : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        this.sceneHandler = GameObject.Find("SceneScript").GetComponent<SceneScript>();
         if (SystemInfo.deviceType == DeviceType.Handheld)
         {
             onMobile = true;
@@ -116,7 +117,8 @@ public class mouseSlicer : MonoBehaviour
                 Debug.DrawLine(v, v2, Color.green);
                 if (hit.transform != null)
                 {
-                    if (hit.transform.gameObject.tag != "BigEnemy")
+                    print(hit.transform.gameObject.tag);
+                    if (hit.transform.parent.gameObject.tag == ("BigEnemy"))
                     {
                         sceneHandler.EndGame();
                     }
