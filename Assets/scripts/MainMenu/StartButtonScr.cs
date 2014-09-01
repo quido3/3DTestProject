@@ -13,8 +13,8 @@ public class StartButtonScr : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		zRotation += rotSpeed;
-		gameObject.transform.eulerAngles = new Vector3 (0, 0 ,zRotation);
+		zRotation -= rotSpeed;
+        gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y, zRotation);
 		
 	}
 }

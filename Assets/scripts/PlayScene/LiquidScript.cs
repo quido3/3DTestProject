@@ -7,6 +7,9 @@ public class LiquidScript : MonoBehaviour
     public GameObject liquid;
     public SceneScript sceneHandler;
     float full = 500;
+    float currLiquid = 0;
+    public TextMesh litersTXT;
+    public TextMesh kmsTXT;
     Material m;
 
     // Use this for initialization
@@ -37,7 +40,10 @@ public class LiquidScript : MonoBehaviour
         float current = m.GetFloat("_Cutoff");
 
         float toAdd = (meshArea / aboutWholeMeshSize) * 200;
+        currLiquid += toAdd;
         current -= toAdd / full;
+        litersTXT.text = ((int)currLiquid).ToString();
+        kmsTXT.text = ((int)(currLiquid * 2.2f)).ToString();
         m.SetFloat("_Cutoff", current);
         sceneHandler.addPoints((int)(toAdd));
         if (current <= 0)

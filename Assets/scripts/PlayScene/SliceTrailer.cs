@@ -17,9 +17,15 @@ public class SliceTrailer : MonoBehaviour
         if (vectorsDiffer(v, vList[vList.Count - 1]))
         {
 
-            addToList(v);
-            if (goodAngle(v))
+
+            if (!goodAngle(v))
             {
+                endTrail(v);
+                startTrail(v);
+            }
+            else
+            {
+                addToList(v);
             }
 
         }
@@ -46,15 +52,25 @@ public class SliceTrailer : MonoBehaviour
         {
             Vector3 first = vList[0];
             Vector3 second = vList[1];
+            Vector3 secondLast = vList[vList.Count - 2];
             Vector3 last = vList[vList.Count - 1];
             //print("first: " + first + " , second: " + second + " , last: " + last);
             Vector3 v1 = second - first;
             Vector3 v2 = last - second;
             //print("v1: " + v1 + " , v2: " + v2);
             float angle1 = Vector3.Angle(v1, v2);
-
-            if (angle1 > 50)
+            if (angle1 > 80)
             {
+                print("whole: " + angle1);
+                return false;
+            }
+            v1 = secondLast - first;
+            v2 = last - secondLast;
+            //print("v1: " + v1 + " , v2: " + v2);
+            angle1 = Vector3.Angle(v1, v2);
+            if (angle1 > 45)
+            {
+                print("last: " + angle1);
                 return false;
             }
         }

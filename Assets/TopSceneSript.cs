@@ -51,7 +51,7 @@ public class TopSceneSript : MonoBehaviour
         titleSize = Screen.height / 7;
         textSize = (Screen.height - titleSize) / 12;
         addAmount = new Vector2(0, textSize);
-        startSpot = new Vector2(Screen.width / 1.5f, titleSize + addAmount.y);
+        startSpot = new Vector2(Screen.width / 1.7f, titleSize + addAmount.y);
         GUIStyle style = new GUIStyle();
         style.fontSize = Mathf.FloorToInt(textSize);
         style.font = font;

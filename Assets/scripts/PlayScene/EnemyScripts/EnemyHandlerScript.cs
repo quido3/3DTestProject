@@ -14,7 +14,7 @@ public class EnemyHandlerScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        spawnEnemies(enemyCount);
+        spawnEnemies();
     }
 
     // Update is called once per frame
@@ -23,11 +23,13 @@ public class EnemyHandlerScript : MonoBehaviour
 
     }
 
-    public void spawnEnemies(int amount)
+    public void spawnEnemies()
     {
         float speed = 0.02f + (PlayerPrefs.GetInt(SS.Level) * 0.002f);
         print("spawning enemies");
         GameObject g;
+        int amount = 5 + (PlayerPrefs.GetInt(SS.Level) * 2);
+        print(amount);
         for (int i = 0; i < amount; i++)
         {
             float big = Random.Range(0, 100);
@@ -36,8 +38,12 @@ public class EnemyHandlerScript : MonoBehaviour
                 g = (GameObject)SS.MyInstantiate(enemyBigPref, Vector3.zero, enemyContainer);
                 g.GetComponent<EnemyScript>().setSpeed(speed / 2);
             }
-            g = (GameObject)SS.MyInstantiate(enemyPref, Vector3.zero, enemyContainer);
-            g.GetComponent<EnemyScript>().setSpeed(speed);
+            else
+            {
+                g = (GameObject)SS.MyInstantiate(enemyPref, Vector3.zero, enemyContainer);
+                g.GetComponent<EnemyScript>().setSpeed(speed);
+            }
+
         }
     }
 }

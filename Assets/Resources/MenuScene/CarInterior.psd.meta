@@ -1,6 +1,8 @@
 fileFormatVersion: 2
 guid: 8fa1a0efbc17b064d983f1f32d838d59
 TextureImporter:
+  fileIDToRecycleName:
+    21300000: CarInterior
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0

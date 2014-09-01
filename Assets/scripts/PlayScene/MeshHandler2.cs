@@ -55,11 +55,11 @@ public class MeshHandler2 : MonoBehaviour
         upObject = risingObject;
         upObject.GetComponent<MeshCollider>().enabled = true;
         changeMaterialColor(upObject, Color.white);
-        enemyHandler.spawnEnemies(10);
+        enemyHandler.spawnEnemies();
         risingObject = null;
         Destroy(toDestroy);
 
-        
+
 
 
     }
