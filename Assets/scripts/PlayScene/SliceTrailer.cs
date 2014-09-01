@@ -10,11 +10,18 @@ public class SliceTrailer : MonoBehaviour
 
     private float differThroshold = 0.7f;
 
+    private float angleThreshold;
+
     public void Add(Vector3 v)
     {
         if (vectorsDiffer(v, vList[vList.Count - 1]))
         {
+
             addToList(v);
+            if (goodAngle(v))
+            {
+            }
+
         }
     }
 
@@ -25,11 +32,33 @@ public class SliceTrailer : MonoBehaviour
             Vector3 add = v;
             add.z = 10;
             vList.Add(Camera.main.ScreenToWorldPoint(add));
+
         }
         else
         {
             print("trying to add to a not ongoing list. addToList()");
         }
+    }
+
+    private bool goodAngle(Vector3 v)
+    {
+        if (vList.Count >= 3)
+        {
+            Vector3 first = vList[0];
+            Vector3 second = vList[1];
+            Vector3 last = vList[vList.Count - 1];
+            //print("first: " + first + " , second: " + second + " , last: " + last);
+            Vector3 v1 = second - first;
+            Vector3 v2 = last - second;
+            //print("v1: " + v1 + " , v2: " + v2);
+            float angle1 = Vector3.Angle(v1, v2);
+
+            if (angle1 > 50)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private bool vectorsDiffer(Vector3 first, Vector3 second)

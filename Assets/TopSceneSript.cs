@@ -42,33 +42,34 @@ public class TopSceneSript : MonoBehaviour
             print(scoreList[i]);
             PlayerPrefs.SetInt("score" + (i + 1), scoreList[i]);
         }
-        titleSize = Screen.height / 7;
-        textSize = (Screen.height - titleSize) / 12;
-        addAmount = new Vector2(0, textSize);
-        startSpot = new Vector2(Screen.width / 2, titleSize + addAmount.y);
+
 
     }
 
     void OnGUI()
     {
+        titleSize = Screen.height / 7;
+        textSize = (Screen.height - titleSize) / 12;
+        addAmount = new Vector2(0, textSize);
+        startSpot = new Vector2(Screen.width / 1.5f, titleSize + addAmount.y);
         GUIStyle style = new GUIStyle();
         style.fontSize = Mathf.FloorToInt(textSize);
         style.font = font;
         GUIStyle titleStyle = new GUIStyle(style);
         titleStyle.fontSize = Mathf.FloorToInt(titleSize);
         titleStyle.alignment = TextAnchor.MiddleCenter;
-        GUI.Label(new Rect(0, Screen.height / 30, Screen.width, titleSize), "TULOKSET", titleStyle);
+        GUI.Label(new Rect(0, Screen.height / 20, Screen.width, titleSize), "TULOKSET", titleStyle);
         int title2Size = Screen.height / 10;
         titleStyle.fontSize = title2Size;
         GUI.Label(new Rect(0, startSpot.y, Screen.width / 2, title2Size), "TULOKSESI", titleStyle);
         int newScoreSize = Screen.height / 8;
         titleStyle.fontSize = newScoreSize;
         GUI.Label(new Rect(0, startSpot.y + title2Size, Screen.width / 2, newScoreSize), "" + newScore, titleStyle);
-        for (int i = 1; i <= 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             float spotX = startSpot.x;
             float spotY = startSpot.y + (addAmount.y * i);
-            GUI.Label(new Rect(spotX, spotY, Screen.width, textSize), i + ". " + scoreList[i - 1], style);
+            GUI.Label(new Rect(spotX, spotY, Screen.width, textSize), i + 1 + ". " + scoreList[i], style);
         }
     }
 }
