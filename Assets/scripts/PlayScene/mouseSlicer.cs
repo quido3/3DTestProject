@@ -68,30 +68,22 @@ public class mouseSlicer : MonoBehaviour
         {
             DrawDebug();
         }
-
-        if (checkEnemyCollision(trailer.getList()))
+        if (trailer.getList() != null)
         {
-            trailer.endTrail(Input.mousePosition);
-            liner.SetVertexCount(0);
-            trailer.startTrail(Input.mousePosition);
+            if (checkEnemyCollision(trailer.getList()))
+            {
+                trailer.endTrail(Input.mousePosition);
+                liner.SetVertexCount(0);
+                trailer.startTrail(Input.mousePosition);
+            }
         }
     }
 
     private void DrawDebug()
     {
-        int count = 0;
         foreach (Vector3 v in debugTrailList)
         {
-            if (count < 3)
-            {
-                Debug.DrawLine(v, new Vector3(15, 0, 0), Color.blue);
-            }
-            else
-            {
-                Debug.DrawLine(v, new Vector3(15, 0, 0), Color.red);
-            }
-
-            count++;
+            Debug.DrawLine(v, new Vector3(15, 0, 0), Color.red);
         }
     }
 
@@ -124,10 +116,11 @@ public class mouseSlicer : MonoBehaviour
                 Debug.DrawLine(v, v2, Color.green);
                 if (hit.transform != null)
                 {
-                    print(hit.transform.gameObject.tag);
+                    print(hit.transform.parent.gameObject.tag);
                     if (hit.transform.parent.gameObject.tag == ("BigEnemy"))
                     {
-                        sceneHandler.EndGame();
+                        debugTrailList.Add(hit.transform.position);
+                        //sceneHandler.EndGame();
                     }
                     if (hit.transform.gameObject.tag != "OuterRing")
                     {

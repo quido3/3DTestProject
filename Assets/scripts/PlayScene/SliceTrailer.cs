@@ -16,8 +16,6 @@ public class SliceTrailer : MonoBehaviour
     {
         if (vectorsDiffer(v, vList[vList.Count - 1]))
         {
-
-
             if (!goodAngle(v))
             {
                 endTrail(v);
@@ -61,7 +59,6 @@ public class SliceTrailer : MonoBehaviour
             float angle1 = Vector3.Angle(v1, v2);
             if (angle1 > 80)
             {
-                print("whole: " + angle1);
                 return false;
             }
             v1 = secondLast - first;

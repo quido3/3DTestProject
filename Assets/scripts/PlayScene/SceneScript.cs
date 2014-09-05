@@ -33,6 +33,7 @@ public class SceneScript : MonoBehaviour
 
     public void EndGame()
     {
+        print("Level fail");
         SavePrefs();
         Application.LoadLevel(2);
     }
@@ -45,6 +46,7 @@ public class SceneScript : MonoBehaviour
 
     public void levelClear()
     {
+        print("Level clear");
         currentLevel++;
         SavePrefs();
         Application.LoadLevel(0);
