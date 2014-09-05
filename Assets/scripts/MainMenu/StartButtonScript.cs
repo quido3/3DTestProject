@@ -21,5 +21,10 @@ public class StartButtonScript : MonoBehaviour
     void OnMouseDown()
     {
         scroller.startTravel();
+        this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        foreach (Transform go in this.transform)
+        {
+            go.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        }
     }
 }

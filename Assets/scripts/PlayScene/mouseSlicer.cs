@@ -68,6 +68,13 @@ public class mouseSlicer : MonoBehaviour
         {
             DrawDebug();
         }
+
+        if (checkEnemyCollision(trailer.getList()))
+        {
+            trailer.endTrail(Input.mousePosition);
+            liner.SetVertexCount(0);
+            trailer.startTrail(Input.mousePosition);
+        }
     }
 
     private void DrawDebug()
@@ -140,17 +147,9 @@ public class mouseSlicer : MonoBehaviour
         }
         if (Input.GetTouch(0).phase == TouchPhase.Moved)
         {
-            if (checkEnemyCollision(trailer.getList()))
-            {
-                trailer.endTrail(Input.mousePosition);
-                liner.SetVertexCount(0);
-                trailer.startTrail(Input.mousePosition);
-            }
-            else
-            {
-                trailer.Add(Input.mousePosition);
-                drawLine();
-            }
+            trailer.Add(Input.mousePosition);
+            drawLine();
+
         }
 
         if (Input.GetTouch(0).phase == TouchPhase.Ended)
@@ -180,17 +179,10 @@ public class mouseSlicer : MonoBehaviour
         }
         if (Input.GetMouseButton(0))
         {
-            if (checkEnemyCollision(trailer.getList()))
-            {
-                trailer.endTrail(Input.mousePosition);
-                liner.SetVertexCount(0);
-                trailer.startTrail(Input.mousePosition);
-            }
-            else
-            {
-                trailer.Add(Input.mousePosition);
-                drawLine();
-            }
+
+            trailer.Add(Input.mousePosition);
+            drawLine();
+
         }
 
         if (Input.GetMouseButtonUp(0))
@@ -316,8 +308,8 @@ public class mouseSlicer : MonoBehaviour
         impactPointIN = Vector3.zero;
         impactPointOUT = Vector3.zero;
 
-        impactPointIN = LineIntersectionPoint(closest, closest2, firstOUT, firstIN);
-        impactPointOUT = LineIntersectionPoint(closest3, closest4, secondIN, secondOUT);
+        //impactPointIN = LineIntersectionPoint(closest, closest2, firstOUT, firstIN);
+        //impactPointOUT = LineIntersectionPoint(closest3, closest4, secondIN, secondOUT);
 
         //-----------------------------------------------------------------------------------
         //Setting the vectors and uvs---------------------------------------------------
@@ -362,7 +354,7 @@ public class mouseSlicer : MonoBehaviour
                         if (cV == closest && added == false)
                         {
                             added = true;
-                            addVertice(vectorsRight, impactPointIN, uvsRight);
+                            //addVertice(vectorsRight, impactPointIN, uvsRight);
                             for (int i = 0; i < trailVs.Count; i++)
                             {
                                 if (insideMesh(trailVs[i], toBeSliced))
@@ -370,9 +362,9 @@ public class mouseSlicer : MonoBehaviour
                                     addVertice(vectorsRight, trailVs[i], uvsRight);
                                 }
                             }
-                            addVertice(vectorsRight, impactPointOUT, uvsRight);
+                            //addVertice(vectorsRight, impactPointOUT, uvsRight);
 
-                            addVertice(vectorsLeft, impactPointOUT, uvsLeft);
+                            //addVertice(vectorsLeft, impactPointOUT, uvsLeft);
                             for (int i = trailVs.Count - 1; i >= 0; i--)
                             {
                                 if (insideMesh(trailVs[i], toBeSliced))
@@ -380,12 +372,12 @@ public class mouseSlicer : MonoBehaviour
                                     addVertice(vectorsLeft, trailVs[i], uvsLeft);
                                 }
                             }
-                            addVertice(vectorsLeft, impactPointIN, uvsLeft);
+                            //addVertice(vectorsLeft, impactPointIN, uvsLeft);
                         }
                         else if (added == false)
                         {
                             added = true;
-                            addVertice(vectorsRight, impactPointOUT, uvsRight);
+                            //addVertice(vectorsRight, impactPointOUT, uvsRight);
                             for (int i = trailVs.Count - 1; i >= 0; i--)
                             {
                                 if (insideMesh(trailVs[i], toBeSliced))
@@ -393,9 +385,9 @@ public class mouseSlicer : MonoBehaviour
                                     addVertice(vectorsRight, trailVs[i], uvsRight);
                                 }
                             }
-                            addVertice(vectorsRight, impactPointIN, uvsRight);
+                            //addVertice(vectorsRight, impactPointIN, uvsRight);
 
-                            addVertice(vectorsLeft, impactPointIN, uvsLeft);
+                            //addVertice(vectorsLeft, impactPointIN, uvsLeft);
                             for (int i = 0; i < trailVs.Count; i++)
                             {
                                 if (insideMesh(trailVs[i], toBeSliced))
@@ -403,7 +395,7 @@ public class mouseSlicer : MonoBehaviour
                                     addVertice(vectorsLeft, trailVs[i], uvsLeft);
                                 }
                             }
-                            addVertice(vectorsLeft, impactPointOUT, uvsLeft);
+                            //addVertice(vectorsLeft, impactPointOUT, uvsLeft);
                         }
                     }
                 }

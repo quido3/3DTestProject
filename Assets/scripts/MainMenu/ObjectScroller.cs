@@ -7,11 +7,18 @@ public class ObjectScroller : MonoBehaviour
     private Vector3 startPos;
     public float speed;
 
+
+    float xSpeed = 0;
+    float ySpeed = 0;
+    float topxSpeed = 0;
+    float topySpeed = 0;
+
     bool scroll = false;
     // Use this for initialization
     void Start()
     {
-
+        topxSpeed = speed * 0.6f;
+        topySpeed = speed * 0.4f;
         startPos = transform.position;
 
     }
@@ -21,9 +28,17 @@ public class ObjectScroller : MonoBehaviour
     {
         if (scroll)
         {
+            if (xSpeed < topxSpeed)
+            {
+                xSpeed += topxSpeed / 250;
+            }
+
+            if (ySpeed < topySpeed)
+            {
+                ySpeed += topySpeed / 250;
+            }
             Vector3 TreePos = transform.position;
-            float xSpeed = speed * 0.6f;
-            float ySpeed = speed * 0.4f;
+
             transform.position = new Vector3(TreePos.x - xSpeed, TreePos.y - ySpeed, TreePos.z);
 
             if (gameObject.transform.position.y < 1.2f)

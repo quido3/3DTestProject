@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class TextureScroller : MonoBehaviour
 {
 
-    private float scrollSpeed = 0.03F;
+    private float topScrollSpeed = 0.03F;
+    private float scrollSpeed = 0;
 
     int level;
 
@@ -18,6 +19,7 @@ public class TextureScroller : MonoBehaviour
     public ScrollHandler scroller;
 
     bool travelled = false;
+    public GameObject fuelBtn;
 
     // Use this for initialization
     void Start()
@@ -35,6 +37,10 @@ public class TextureScroller : MonoBehaviour
     {
         if (travel)
         {
+            if (scrollSpeed < topScrollSpeed)
+            {
+                scrollSpeed += topScrollSpeed / 250;
+            }
             scroller.startScrolls();
             if (mat.GetTextureOffset("_MainTex").y < levelOffsets[level - 1])
             {
@@ -46,6 +52,12 @@ public class TextureScroller : MonoBehaviour
                 travel = false;
                 travelled = true;
                 scroller.stopScrolls();
+                fuelBtn.GetComponent<SpriteRenderer>().enabled = true;
+                fuelBtn.GetComponent<CircleCollider2D>().enabled = true;
+                foreach (Transform go in fuelBtn.transform)
+                {
+                    go.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                }
             }
         }
 
